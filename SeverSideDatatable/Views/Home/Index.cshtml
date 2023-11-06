@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<link href="~/Content/DataTables/css/jquery.dataTables.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/dataTables.bootstrap.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped" id="tblCustomer">
+            <thead style="background-color:darkgrey">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">PhoneNO.</th>
+                    <th scope="col">BirthDate</th>
+                    <th scope="col">Email</th>
+
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.js"></script>
+    <script src="~/Scripts/DataTables/dataTables.bootstrap.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            bindDatatable();
+        });
+
+        function bindDatatable() {
+            datatable = $('#tblCustomer')
+                .DataTable({
+                    "sAjaxSource": "/Home/GetData",
+                    "bServerSide": true,
+                    "bProcessing": true,
+                    "searchHighlight":true,
+                    "order": [[1, 'asc']],
+                    "language": {
+                        "emptyTable": "No record found.",
+                        "processing":
+                            '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:#2a2b2b;"></i><span class="sr-only">Loading...</span> '
+                    },
+                    "columns": [
+                        {
+                            "data": "Name",
+                            "autoWidth": true,
+                            "searchable": true
+                        },
+                        {
+                            "data": "Address",
+                            "autoWidth": true,
+                            "searchable": true
+                        },
+                        {
+                            "data": "Mobileno",
+                            "autoWidth": true,
+                            "searchable": true
+                        },
+                        {
+                            "data": "Birthdate",
+                            "autoWidth": true,
+                            "searchable": true,
+                             "render": function (data) {
+                                if (data != null) {
+                                    var ddd = parseInt(data.substr(6, data.length - 7));
+                                    //var numn = 1587407400000;
+                                    var date = new Date(ddd);
+                                    var month = date.getMonth() + 1;
+                                    // return (month.toString().length > 1 ? month : "0" + month) + "/" + date.getDate() + "/" + date.getFullYear();
+                                   return (date.getDate().toString().length > 1 ? date.getDate() : "0" + date.getDate()) + "/" + (month.toString().length > 1 ? month : "0" + month) + "/" + date.getFullYear();
+                                }
+                            }
+                        },
+                         {
+                            "data": "EmailID",
+                            "autoWidth": true,
+                            "searchable": true
+                        },
+                    ]
+                });
+        }
+    </script>
+}
